@@ -1,0 +1,91 @@
+sudo -u postgres psql
+\password postgres
+create database codingclub;
+psql "host=localhost dbname=codingclub user=postgres password=postgres"
+
+wkhtmltopdf
+
+Setting up tomcat
+https://www.digitalocean.com/community/tutorials/how-to-install-apache-tomcat-8-on-ubuntu-14-04
+wget http://archive.apache.org/dist/tomcat/tomcat-8/v8.0.23/bin/apache-tomcat-8.0.23.tar.g
+sudo chgrp -R tomcat /opt/tomcat/webapps
+
+sudo chmod -R g+w /opt/tomcat/webapps
+
+......................................................
+
+https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-16-04
+
+......................................................
+
+https://certbot.eff.org/#ubuntutrusty-nginx
+
+
+..................................
+Maven setup
+
+sudo apt-get install maven
+sudo apt-cache search maven
+......................................................
+chmod 600 ~/Downloads/shortmints.pem
+ssh -i ~/Downloads/shortmints.pem ubuntu@shortmints.com
+
+......................................................
+Database setup from local:
+pg_dump "host=localhost dbname=medianews user=abhishek password=abhishek" > database.sql
+sudo scp -i shortmints.pem db.sql ubuntu@shortmints.com:
+Dump the sql file in production database
+    SERVER :
+    pg_dump "host=localhost dbname=medianews user=produser password=secretmedia" < db.sql
+    LOCAL:
+    psql "host=localhost dbname=medianews user=postgres password=postgres" medianews < db.sql
+    psql "host=localhost dbname=clicdirectory user=postgres password=postgres" medianews < db.sql
+
+
+............................................................
+Running Tomcat for Java8:
+Add following line in /opt/tomcat/bin/catalina.sh and /opt/tomcat/bin/startup.sh
+JAVA_HOME=/usr/lib/jvm/java-8-oracle
+JRE_HOME=/usr/lib/jvm/java-8-oracle/jre
+...........................................................
+Create folder images under BASE_DIR
+
+
+..........................Check Logs................................
+/opt/tomcat/webapps/miscLogs
+
+...........................................................
+
+Device token :
+curl -X POST https://fcm.googleapis.com/fcm/send -H 'authorization: key=AAAA0UlcOvs:APA91bE170haAOZNxfJ551Q0wzalYMOu6n_LxBXXmj54eJP6qG-yjTn6gk3o29ao6mx4vPxyq4YxP038rFd1uIH0lkxmGGNizklzxCCIbpmZAu-oA28xf1wjJSoB6WvfrFMWtu00TAQY' -H 'cache-control: no-cache' -H 'content-type: application/json' -H 'postman-token: 81d72769-f742-3df3-315b-4012c8ac4daf' -d '{ "to" : "cKqZGj3hEE4:APA91bHyOoP4n6dpEpfpEWlycYqwrGabtEGKa_RwcaNM0loJll0OLzK9Yn1-_QimdmVrv03GftHRCkxGiDv17yHu6EqIXO_KHUTlLL6exE8xSFbvPwKbls_YP7A1xeqN0jBJYVK602Ak", "notification": { "title" : "The Utilimate Horo","body" : "What is your horoscope today ?","icon" : "http://cache1.asset-cache.net/xt/619656278.jpg?v=1&g=fs1|0|SKP534|56|278&s=1&b=RkFD"},"content_available" : true}'
+
+...........................................................
+
+Setup https
+
+Add 443 on aws
+CNAME entry on DNS
+
+wget https://dl.eff.org/certbot-auto
+chmod a+x certbot-auto
+
+./certbot-auto certonly --standalone -d xyz.yourdomain.com
+
+Add this to nginx conf. ( /etc/nginx/conf.d/tomcat-proxy.conf )
+server {
+    listen 443 ssl;
+    server_name xyz.yourdomain.com;
+    ssl_certificate /etc/letsencrypt/live/xyz.yourdomain.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/xyz.yourdomain.com/privkey.pem;
+    add_header Strict-Transport-Security “max-age=31536000”;
+
+    location / {
+      proxy_pass http://127.0.0.1:3000;
+    }
+}
+
+sudo service nginx reload
+
+ssh -i ~/Downloads/punni.pem ubuntu@18.220.223.66
+
+tEST
