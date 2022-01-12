@@ -9,7 +9,7 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
     <properties>
-        <spring.version>5.2.7.RELEASE</spring.version>
+        <spring.version>5.3.14</spring.version>
         <TOMCAT_HOSTNAME></TOMCAT_HOSTNAME>
         <TOMCAT_PORT>8080</TOMCAT_PORT>
         <TOMCAT_URI>http://${TOMCAT_HOSTNAME}:${TOMCAT_PORT}/manager/text</TOMCAT_URI>
